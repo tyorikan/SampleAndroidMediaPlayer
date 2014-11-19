@@ -186,12 +186,16 @@ public class MediaFragment extends Fragment {
         final PodcastPlayer podcastPlayer = PodcastPlayer.getInstance();
         podcastPlayer.pause();
         seekBar.setEnabled(false);
-        PodcastPlayerNotification
-                .notify(getActivity(), episode, PodcastPlayer.getInstance().getCurrentPosition());
+        PodcastPlayerNotification.notify(
+                getActivity(),
+                episode,
+                PodcastPlayer.getInstance().getCurrentPosition(),
+                PodcastPlayer.getInstance().getDuration()
+        );
     }
 
     private void setupSeekBar(final Episode episode) {
-        mediaDurationTextView.setText(episode.getDuration());
+        mediaDurationTextView.setText(getResources().getString(R.string.default_duration));
 
         if (PodcastPlayer.getInstance().isPlaying()) {
             updateCurrentTime(PodcastPlayer.getInstance().getCurrentPosition());
@@ -200,7 +204,7 @@ public class MediaFragment extends Fragment {
         }
 
         seekBar.setOnSeekBarChangeListener(new OnPlayerSeekListener());
-        seekBar.setMax(DateUtils.durationToInt(episode.getDuration()));
+        seekBar.setMax(0);
         if (PodcastPlayer.getInstance().isPlayingEpisode(episode)) {
             seekBar.setEnabled(true);
         } else {
@@ -210,11 +214,13 @@ public class MediaFragment extends Fragment {
         PodcastPlayer.getInstance().setCurrentTimeListener(
                 new PodcastPlayer.CurrentTimeListener() {
                     @Override
-                    public void onTick(int currentPosition) {
+                    public void onTick(int currentPosition, int duration) {
                         if (PodcastPlayer.getInstance().isPlayingEpisode(episode)) {
                             updateCurrentTime(currentPosition);
                             PodcastPlayerNotification
-                                    .notify(getActivity(), episode, currentPosition);
+                                    .notify(getActivity(), episode, currentPosition, duration);
+                            mediaDurationTextView.setText(DateUtils.formatCurrentTime(duration));
+                            seekBar.setMax(duration);
                         } else {
                             updateCurrentTime(0);
                         }

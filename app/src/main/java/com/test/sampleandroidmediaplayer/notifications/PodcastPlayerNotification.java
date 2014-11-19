@@ -1,13 +1,12 @@
 package com.test.sampleandroidmediaplayer.notifications;
 
-import com.test.sampleandroidmediaplayer.models.Episode;
-import com.test.sampleandroidmediaplayer.media.PodcastPlayer;
 import com.test.sampleandroidmediaplayer.R;
 import com.test.sampleandroidmediaplayer.events.BusProvider;
 import com.test.sampleandroidmediaplayer.events.ReceivePauseActionEvent;
 import com.test.sampleandroidmediaplayer.events.ReceiveResumeActionEvent;
+import com.test.sampleandroidmediaplayer.media.PodcastPlayer;
+import com.test.sampleandroidmediaplayer.models.Episode;
 import com.test.sampleandroidmediaplayer.services.PodcastPlayerService;
-import com.test.sampleandroidmediaplayer.utils.DateUtils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -28,10 +27,10 @@ public class PodcastPlayerNotification {
     }
 
     public static void notify(Context context, Episode episode) {
-        notify(context, episode, 0);
+        notify(context, episode, 0, 0);
     }
 
-    public static void notify(Context context, Episode episode, int currentPosition) {
+    public static void notify(Context context, Episode episode, int currentPosition, int duration) {
         if (!shouldNotify(context, episode)) {
             return;
         }
@@ -40,7 +39,7 @@ public class PodcastPlayerNotification {
                 = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(
                 getNotificationId(),
-                build(context, episode, currentPosition));
+                build(context, episode, currentPosition, duration));
     }
 
     private static boolean shouldNotify(Context context, Episode episode) {
@@ -51,13 +50,14 @@ public class PodcastPlayerNotification {
                 && (podcastPlayer.isPlaying() || podcastPlayer.isPaused()));
     }
 
-    private static Notification build(Context context, Episode episode, int currentPosition) {
+    private static Notification build(Context context, Episode episode, int currentPosition,
+            int duration) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
         builder.setSmallIcon(R.drawable.ic_launcher);
         builder.setContentTitle(episode.getTitle());
         builder.setContentText(episode.getDescription());
-        builder.setProgress(DateUtils.durationToInt(episode.getDuration()), currentPosition, false);
+        builder.setProgress(duration, currentPosition, false);
 
         if (PodcastPlayer.getInstance().isPlaying()) {
             builder.addAction(
@@ -127,7 +127,8 @@ public class PodcastPlayerNotification {
             PodcastPlayerNotification.notify(
                     context,
                     PodcastPlayer.getInstance().getEpisode(),
-                    PodcastPlayer.getInstance().getCurrentPosition());
+                    PodcastPlayer.getInstance().getCurrentPosition(),
+                    PodcastPlayer.getInstance().getDuration());
         } else if (action.equals(ACTION_STOP)) {
             PodcastPlayer.getInstance().stop();
             cancel(context);

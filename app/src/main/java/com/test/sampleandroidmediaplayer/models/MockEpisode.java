@@ -13,7 +13,7 @@ public class MockEpisode extends Episode {
     private static Uri enclosure = Uri.parse(
             "http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8");
     private static String pubDate = "Sat, 08 Nov 2014 00:00:00 -0800";
-    private static String duration = "1:29:25";
+    private static String duration = "00:00";
 
     public MockEpisode() {
         super(
@@ -23,7 +23,6 @@ public class MockEpisode extends Episode {
                 link,
                 pubDate,
                 enclosure,
-                duration,
                 null
         );
     }

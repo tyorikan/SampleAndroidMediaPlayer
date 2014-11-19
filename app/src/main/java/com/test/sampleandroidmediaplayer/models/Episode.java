@@ -19,7 +19,6 @@ public class Episode implements Parcelable {
     private Uri link;
     private Date postedAt;
     private Uri enclosure;
-    private String duration;
     private String showNotes;
     private boolean isFavorited;
     private boolean hasPlayed;
@@ -77,14 +76,6 @@ public class Episode implements Parcelable {
         this.enclosure = enclosure;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
     public String getShowNotes() {
         return showNotes;
     }
@@ -134,7 +125,7 @@ public class Episode implements Parcelable {
     }
 
     public Episode(String id, String title, String description, Uri link, String pubDate,
-            Uri enclosure, String duration, String showNotes) {
+            Uri enclosure, String showNotes) {
         super();
         this.id = id;
         this.title = title;
@@ -142,7 +133,6 @@ public class Episode implements Parcelable {
         this.link = link;
         this.postedAt = DateUtils.pubDateToDate(pubDate);
         this.enclosure = enclosure;
-        this.duration = duration;
         this.showNotes = showNotes;
     }
 
@@ -159,7 +149,6 @@ public class Episode implements Parcelable {
         dest.writeString(link.toString());
         dest.writeLong(postedAt.getTime());
         dest.writeString(enclosure == null ? "" : enclosure.toString());
-        dest.writeString(duration);
         dest.writeString(showNotes);
         dest.writeInt(isFavorited ? 1 : 0);
         dest.writeInt(hasPlayed ? 1 : 0);
@@ -184,7 +173,6 @@ public class Episode implements Parcelable {
         postedAt = new Date(in.readLong());
         String uriString = in.readString();
         enclosure = (TextUtils.isEmpty(uriString) ? null : Uri.parse(uriString));
-        duration = in.readString();
         showNotes = in.readString();
         isFavorited = (in.readInt() == 1);
         hasPlayed = (in.readInt() == 1);

@@ -73,9 +73,9 @@ public class PodcastPlayer extends MediaPlayer implements MediaPlayer.OnPrepared
             @Override
             public void tick(long timeMillis) {
                 if (isPlaying() || isPaused()) {
-                    currentTimeListener.onTick(getCurrentPosition());
+                    currentTimeListener.onTick(getCurrentPosition(), getDuration());
                 } else {
-                    currentTimeListener.onTick(0);
+                    currentTimeListener.onTick(0, getDuration());
                 }
             }
         });
@@ -152,7 +152,7 @@ public class PodcastPlayer extends MediaPlayer implements MediaPlayer.OnPrepared
 
     public static interface CurrentTimeListener {
 
-        public void onTick(int currentPosition);
+        public void onTick(int currentPosition, int duration);
     }
 
     public enum PlayerStatus {
