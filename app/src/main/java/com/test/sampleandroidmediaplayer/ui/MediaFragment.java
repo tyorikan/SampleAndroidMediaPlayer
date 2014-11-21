@@ -220,13 +220,14 @@ public class MediaFragment extends Fragment {
                             PodcastPlayerNotification
                                     .notify(getActivity(), episode, currentPosition, duration);
 
-                            if (duration > 0) {
-                                if (mediaDurationTextView != null) {
-                                    mediaDurationTextView
-                                            .setText(DateUtils.formatCurrentTime(duration));
-                                }
+                            if (duration > 0 && mediaDurationTextView != null) {
+                                mediaDurationTextView
+                                        .setText(DateUtils.formatCurrentTime(duration));
                             }
-                            seekBar.setMax(duration);
+
+                            if (seekBar != null) {
+                                seekBar.setMax(duration);
+                            }
 
                         } else {
                             updateCurrentTime(0);
