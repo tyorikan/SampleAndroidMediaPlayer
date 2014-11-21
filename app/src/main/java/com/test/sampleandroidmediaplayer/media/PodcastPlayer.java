@@ -75,7 +75,7 @@ public class PodcastPlayer extends MediaPlayer implements MediaPlayer.OnPrepared
                 if (isPlaying() || isPaused()) {
                     currentTimeListener.onTick(getCurrentPosition(), getDuration());
                 } else {
-                    currentTimeListener.onTick(0, getDuration());
+                    currentTimeListener.onTick(0, 0);
                 }
             }
         });
